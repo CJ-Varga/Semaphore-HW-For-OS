@@ -14,7 +14,9 @@
 #include <string.h>
 #include <sys/shm.h>
 
+//SNAME = Semaphore Name 
 #define SNAME "/mySemaphore"
+//SHNAME = SHared (data) Name
 #define SHNAME "/shared"
 
 int main(){
@@ -50,7 +52,7 @@ int main(){
     //critical section
     sleep(2);
     x = ((rand()%100)+1);
-    int y = counter / 4;
+    int y = (counter / sizeof(int));
     //printf(y + "\n");
     num = &x;
     sprintf(ptr, "%i", x);
@@ -69,8 +71,12 @@ int main(){
     printf("Producer exiting critical section\n");
     sem_post(sem);
     sleep(1);
+
+
     repeats+=1;
     }while(repeats<5);
+
+    //release the shared data
     shm_unlink(SHNAME);
     sem_unlink(SNAME);
 }

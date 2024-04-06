@@ -14,7 +14,9 @@
 #include <string.h>
 #include <sys/shm.h>
 
+//SNAME = Semaphore Name 
 #define SNAME "/mySemaphore"
+//SHNAME = SHared (data) Name
 #define SHNAME "/shared"
 
 int main(){
@@ -48,8 +50,10 @@ int main(){
     printf("Consumer entering critical section\n");
 
     //critical section
+    int y = (counter / sizeof(int));
     printf("The consumer used up ");
     printf("%i", (int*)ptr);
+    printf(" from slot %d", y);
     printf("\n");
     sprintf(ptr, "%i", 0);
     ptr += (sizeof(int));
@@ -63,6 +67,7 @@ int main(){
     //signal that critical section has been exited
     printf("Consumer exiting critical section\n");
     sem_post(sem);
+
     sleep(1);
     repeats+=1;
     }while(repeats<5);
