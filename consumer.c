@@ -1,4 +1,4 @@
-//Producer-Consumer Homework
+//Producer-Consumer Homework's Consumer Process
 //CJ Varga
 //Creatd 4/5/2024
 
@@ -10,6 +10,7 @@
 #include <sys/mman.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 
 int main(){
