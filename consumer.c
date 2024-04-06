@@ -20,9 +20,8 @@
 #define SHNAME "/shared"
 
 int main(){
-    sem_unlink(SNAME);
     int repeats=0;
-    const int SIZE = 39;
+    const int SIZE = 10;
     int x = 0;
     int *num = &x;
     int counter = 0;
@@ -41,8 +40,9 @@ int main(){
     void* ptr = mmap(0, SIZE, PROT_WRITE | PROT_READ, MAP_SHARED, shm, 0);
 
     do{
-    while (*(int*)ptr == 0){
-        sleep(1);    //waiting until next memory location is empty
+    while (*(char*)ptr == 0){
+        //printf("Consumer is waiting...\n");
+            //waiting until next memory location is empty
     }
 
     //call wait to enter critical section
@@ -50,15 +50,15 @@ int main(){
     printf("Consumer entering critical section\n");
 
     //critical section
-    int y = (counter / sizeof(int));
+    int y = counter;
     printf("The consumer used up ");
-    printf("%i", (int*)ptr);
+    printf((char*)ptr);
     printf(" from slot %d", y);
     printf("\n");
     //set the table data back to 0
-    sprintf(ptr, "%i", 0);
-    ptr += (sizeof(int));
-    counter += 4;
+    sprintf(ptr, "%c", 0);
+    ptr += (sizeof(char));
+    counter += 1;
     if (counter > SIZE){
         counter = 0;
         ptr = mmap(0, SIZE, PROT_WRITE | PROT_READ, MAP_SHARED, shm, 0);
@@ -71,5 +71,9 @@ int main(){
 
     sleep(1);
     repeats+=1;
-    }while(repeats<5);
+    }while(repeats<15);
+
+    //release the shared data
+    shm_unlink(SHNAME);
+    sem_unlink(SNAME);
 }

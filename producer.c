@@ -20,10 +20,11 @@
 #define SHNAME "/shared"
 
 int main(){
+
     int repeats=0;
-    const int SIZE = 39;
+    const int SIZE = 10;
     void *num;
-    int x;
+    char x;
     int counter = 0;
 
     shm_unlink(SHNAME);
@@ -39,28 +40,28 @@ int main(){
     void* ptr;
     ptr = mmap(0, SIZE, PROT_WRITE | PROT_READ, MAP_SHARED, shm, 0);
 
-
     do{
-    while (*(int*)ptr != 0){
+        
+    while (*(char*)ptr != 0){
+        printf("producer waiting...\n");
         sleep(1);//waiting until next memory location is empty
     }
-
     //call wait to enter critical section
     sem_wait(sem);
     printf("Producer entering critical section\n");
 
     //critical section
     sleep(2);
-    x = ((rand()%100)+1);
-    int y = (counter / sizeof(int));
+    x = (char)((rand()%24)+'a');
+    int y = counter;
     //printf(y + "\n");
     num = &x;
-    sprintf(ptr, "%i", x);
-    printf("The Producer added %d", x);
+    sprintf(ptr, "%c", x);
+    printf("The Producer added %c", x);
     printf(" to slot %d", y);
     printf("\n");
-    ptr += (sizeof(int));
-    counter += 4;
+    ptr += (sizeof(char));
+    counter += 1;
     if (counter > SIZE){
         counter = 0;
         ptr = mmap(0, SIZE, PROT_WRITE | PROT_READ, MAP_SHARED, shm, 0);
@@ -74,9 +75,7 @@ int main(){
 
 
     repeats+=1;
-    }while(repeats<5);
+    }while(repeats<15);
 
-    //release the shared data
-    shm_unlink(SHNAME);
     sem_unlink(SNAME);
 }

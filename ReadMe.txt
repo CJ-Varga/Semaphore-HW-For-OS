@@ -8,4 +8,6 @@ memory. A POSIX semaphore is employed to keep critical functions mutually
 exclusive, so no critical section related errors are made.
 sleep() is used through the program frequently to make the output easier
 to read as well as force situations to verify that the semaphore is
-preventing overlapping critical sections.
+preventing overlapping critical sections. The producer adds a random char
+between a and x, and the consumer prints them to the screen and then sets
+the data back to 0;
