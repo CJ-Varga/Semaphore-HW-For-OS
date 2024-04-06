@@ -55,6 +55,7 @@ int main(){
     printf("%i", (int*)ptr);
     printf(" from slot %d", y);
     printf("\n");
+    //set the table data back to 0
     sprintf(ptr, "%i", 0);
     ptr += (sizeof(int));
     counter += 4;
