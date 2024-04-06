@@ -1,0 +1,92 @@
+[1] 10133
+[2] 10134
+Producer entering critical section
+The Producer added h to slot 0
+Producer exiting critical section
+Consumer entering critical section
+The consumer used up h from slot 0
+Consumer exiting critical section
+Producer entering critical section
+The Producer added w to slot 1
+Producer exiting critical section
+Consumer entering critical section
+The consumer used up w from slot 1
+Consumer exiting critical section
+Producer entering critical section
+The Producer added j to slot 2
+Producer exiting critical section
+Consumer entering critical section
+The consumer used up j from slot 2
+Consumer exiting critical section
+Producer entering critical section
+The Producer added t to slot 3
+Producer exiting critical section
+Consumer entering critical section
+The consumer used up t from slot 3
+Consumer exiting critical section
+Producer entering critical section
+The Producer added r to slot 4
+Producer exiting critical section
+Consumer entering critical section
+The consumer used up r from slot 4
+Consumer exiting critical section
+Producer entering critical section
+The Producer added h to slot 5
+Producer exiting critical section
+Consumer entering critical section
+The consumer used up h from slot 5
+Consumer exiting critical section
+Producer entering critical section
+The Producer added k to slot 6
+Producer exiting critical section
+Consumer entering critical section
+The consumer used up k from slot 6
+Consumer exiting critical section
+Producer entering critical section
+The Producer added m to slot 7
+Producer exiting critical section
+Consumer entering critical section
+The consumer used up m from slot 7
+Consumer exiting critical section
+Producer entering critical section
+The Producer added j to slot 8
+Producer exiting critical section
+Consumer entering critical section
+The consumer used up j from slot 8
+Consumer exiting critical section
+Producer entering critical section
+The Producer added n to slot 9
+Producer exiting critical section
+Consumer entering critical section
+The consumer used up n from slot 9
+Consumer exiting critical section
+Producer entering critical section
+The Producer added c to slot 10
+Producer exiting critical section
+Consumer entering critical section
+The consumer used up c from slot 10
+Consumer exiting critical section
+Producer entering critical section
+The Producer added t to slot 0
+Producer exiting critical section
+Consumer entering critical section
+The consumer used up t from slot 0
+Consumer exiting critical section
+Producer entering critical section
+The Producer added c to slot 1
+Producer exiting critical section
+Consumer entering critical section
+The consumer used up c from slot 1
+Consumer exiting critical section
+Producer entering critical section
+The Producer added t to slot 2
+Producer exiting critical section
+Consumer entering critical section
+The consumer used up t from slot 2
+Consumer exiting critical section
+Producer entering critical section
+The Producer added l to slot 3
+Producer exiting critical section
+Consumer entering critical section
+The consumer used up l from slot 3
+Consumer exiting critical section
