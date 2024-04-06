@@ -11,13 +11,14 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <cstring>
+#include <string.h>
 
 #define SNAME "/mySemaphore"
 #define SHNAME "/shared"
 
 int main(){
-    const int SIZE = 255;
+    int repeats=0;
+    const int SIZE = 39;
     int x = 0;
     int *num = &x;
     int counter;
@@ -26,7 +27,7 @@ int main(){
     sleep(2);
 
     //grab reference to same semaphore as consumer
-    sem_t *sem = sem_open("/mySemaphore", 0);
+    sem_t *sem = sem_open(SNAME, O_CREAT);
 
     //declare shared memory
     int shm = shm_open(SHNAME, O_CREAT, 0644);
@@ -36,27 +37,29 @@ int main(){
     void* ptr = mmap(0, SIZE, PROT_WRITE | PROT_READ, MAP_SHARED, shm, 0);
 
     do{
-    do{
-        //waiting until next memory location is empty
-    } while (*(int*)ptr == 0);
+    //do{
+    //    //waiting until next memory location is empty
+    //} while (*(int*)ptr == 0);
 
     //call wait to enter critical section
     sem_wait(sem);
-    printf("Consumer entering critical section");
+    printf("Consumer entering critical section\n");
 
     //critical section
     printf("%i", (int*)ptr);
-    memcpy(ptr, num, sizeof(int));
+    //memcpy(ptr, num, sizeof(int));
     ptr += (sizeof(int));
     counter += 4;
-    if (counter > 255){
+    if (counter > SIZE){
         counter = 0;
         ptr = mmap(0, SIZE, PROT_WRITE | PROT_READ, MAP_SHARED, shm, 0);
     }
     
 
     //signal that critical section has been exited
-    printf("Consumer exiting critical section");
+    printf("Consumer exiting critical section\n");
     sem_post(sem);
-    }while(0==0);
+    sleep(1);
+    repeats+=1;
+    }while(repeats<5);
 }

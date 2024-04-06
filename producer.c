@@ -11,17 +11,19 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <cstring>
+#include <string.h>
 
 #define SNAME "/mySemaphore"
 #define SHNAME "/shared"
 
 int main(){
-    const int SIZE = 255;
+    int repeats=0;
+    const int SIZE = 39;
     int *num;
     int x;
     int counter;
 
+    sem_unlink(SNAME);
     //declare semaphore initialized at 1
     sem_t *sem = sem_open(SNAME, O_CREAT, 0644, 1);
 
@@ -32,29 +34,35 @@ int main(){
     //set pointer to beginning of shared
     void* ptr = mmap(0, SIZE, PROT_WRITE | PROT_READ, MAP_SHARED, shm, 0);
 
+
     do{
-    do{
-        //waiting until next memory location is empty
-    } while (*(int*)ptr != 0);
+    //do{
+    //    sleep(1);//waiting until next memory location is empty
+    //} while (*(int*)ptr != NULL);
 
     //call wait to enter critical section
     sem_wait(sem);
-    printf("Producer entering critical section");
+    printf("Producer entering critical section\n");
 
     //critical section
+    sleep(2);
     x = ((rand()%100)+1);
     num = &x;
-    memcpy(ptr, num, sizeof(int));
+    //memcpy(ptr, num, sizeof(int));
     ptr += (sizeof(int));
     counter += 4;
-    if (counter > 255){
+    if (counter > SIZE){
         counter = 0;
         ptr = mmap(0, SIZE, PROT_WRITE | PROT_READ, MAP_SHARED, shm, 0);
     }
     
 
     //signal that critical section has been exited
-    printf("Producer exiting critical section");
+    printf("Producer exiting critical section\n");
     sem_post(sem);
-    }while(0==0);
+    sleep(1);
+    repeats+=1;
+    }while(repeats<5);
+    shm_unlink(SHNAME);
+    sem_unlink(SNAME);
 }
