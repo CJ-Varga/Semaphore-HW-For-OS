@@ -12,6 +12,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <string.h>
+#include <sys/shm.h>
 
 #define SNAME "/mySemaphore"
 #define SHNAME "/shared"
@@ -19,26 +20,28 @@
 int main(){
     int repeats=0;
     const int SIZE = 39;
-    int *num;
+    void *num;
     int x;
-    int counter;
+    int counter = 0;
 
+    shm_unlink(SHNAME);
     sem_unlink(SNAME);
     //declare semaphore initialized at 1
     sem_t *sem = sem_open(SNAME, O_CREAT, 0644, 1);
 
     //declare shared memory
-    int shm = shm_open(SHNAME, O_CREAT, 0644);
+    int shm = shm_open(SHNAME, O_CREAT | O_RDWR, 0666);
     //expand size of shared memory
-    truncate(SHNAME, SIZE);
+    ftruncate(shm, SIZE);
     //set pointer to beginning of shared
-    void* ptr = mmap(0, SIZE, PROT_WRITE | PROT_READ, MAP_SHARED, shm, 0);
+    void* ptr;
+    ptr = mmap(0, SIZE, PROT_WRITE | PROT_READ, MAP_SHARED, shm, 0);
 
 
     do{
-    //do{
-    //    sleep(1);//waiting until next memory location is empty
-    //} while (*(int*)ptr != NULL);
+    while (*(int*)ptr != 0){
+        sleep(1);//waiting until next memory location is empty
+    }
 
     //call wait to enter critical section
     sem_wait(sem);
@@ -47,8 +50,13 @@ int main(){
     //critical section
     sleep(2);
     x = ((rand()%100)+1);
+    int y = counter / 4;
+    //printf(y + "\n");
     num = &x;
-    //memcpy(ptr, num, sizeof(int));
+    sprintf(ptr, "%i", x);
+    printf("The Producer added %d", x);
+    printf(" to slot %d", y);
+    printf("\n");
     ptr += (sizeof(int));
     counter += 4;
     if (counter > SIZE){

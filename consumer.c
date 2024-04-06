@@ -12,16 +12,18 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <string.h>
+#include <sys/shm.h>
 
 #define SNAME "/mySemaphore"
 #define SHNAME "/shared"
 
 int main(){
+    sem_unlink(SNAME);
     int repeats=0;
     const int SIZE = 39;
     int x = 0;
     int *num = &x;
-    int counter;
+    int counter = 0;
 
     //wait for semaphore to be created
     sleep(2);
@@ -30,24 +32,26 @@ int main(){
     sem_t *sem = sem_open(SNAME, O_CREAT);
 
     //declare shared memory
-    int shm = shm_open(SHNAME, O_CREAT, 0644);
+    int shm = shm_open(SHNAME, O_CREAT | O_RDWR, 0666);
     //expand size of shared memory
     truncate(SHNAME, SIZE);
     //set pointer to beginning of shared
     void* ptr = mmap(0, SIZE, PROT_WRITE | PROT_READ, MAP_SHARED, shm, 0);
 
     do{
-    //do{
-    //    //waiting until next memory location is empty
-    //} while (*(int*)ptr == 0);
+    while (*(int*)ptr == 0){
+        sleep(1);    //waiting until next memory location is empty
+    }
 
     //call wait to enter critical section
     sem_wait(sem);
     printf("Consumer entering critical section\n");
 
     //critical section
+    printf("The consumer used up ");
     printf("%i", (int*)ptr);
-    //memcpy(ptr, num, sizeof(int));
+    printf("\n");
+    sprintf(ptr, "%i", 0);
     ptr += (sizeof(int));
     counter += 4;
     if (counter > SIZE){
