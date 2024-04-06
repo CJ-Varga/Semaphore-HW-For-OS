@@ -11,19 +11,11 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 
-#define SNAME "/mySemaphore"
 
 int main(){
-    printf("Hello");
+    //wait for semaphore to be created
+    sleep(2);
 
-    //declare semaphore
-    sem_t *sem = sem_open(SNAME, 0_CREAT, 0644, 1);
-
-    //call wait to enter critical section
-    //sem_wait(&sem);
-
-    //critical section
-    //sleep(4);
-
-    //signal that critical section has been exited
+    //grab reference to same semaphore as consumer
+    sem_t *sem = sem_open("/mySemaphore", 0);
 }
