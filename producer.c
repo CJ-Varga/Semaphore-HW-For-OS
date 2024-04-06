@@ -6,5 +6,9 @@
 #include <sys/mman.h>
 
 int main(){
-    printf("Hello");
+    //wait for semaphore to be created
+    sleep(2)
+
+    //grab reference to same semaphore as consumer
+    sem_t *sem = sem_open(mySemaphore, 0);
 }
